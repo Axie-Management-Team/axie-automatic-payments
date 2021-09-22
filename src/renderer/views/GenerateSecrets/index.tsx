@@ -1,11 +1,11 @@
 import React from 'react';
+import { Button } from '@mui/material';
 import EditableTable, { EditableCell } from '../../components/EditableTable';
 import { usePayments, useSecrets } from '../../state/application/hooks';
 import { Payment, Secret } from '../../state/types';
 import { addSecretAction } from '../../state/application';
 import { useAppDispatch } from '../../state';
 import Text from '../../components/Text';
-import Button from '../../components/Buttons/Button';
 
 const GenerateSecrets: React.FC = () => {
   const payments = usePayments();
@@ -80,9 +80,11 @@ const GenerateSecrets: React.FC = () => {
       />
       <Text>Already stored keys </Text>
       <Button
-        value="Show private key"
         onClick={() => setShowFullPrivateKey(!showFullPrivateKey)}
-      />
+        variant="contained"
+      >
+        👀
+      </Button>
       <EditableTable
         columns={columns}
         data={havePrivateKey}

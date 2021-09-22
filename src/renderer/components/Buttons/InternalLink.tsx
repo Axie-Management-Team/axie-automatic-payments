@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { Button } from '@mui/material';
 
 export interface InternalLinkProps {
   path: string;
@@ -9,8 +10,6 @@ export interface InternalLinkProps {
   icon?: string;
 }
 
-const Button = styled.button``;
-
 const IconWrapper = styled.span`
   padding-right: 6px;
 `;
@@ -18,7 +17,7 @@ const IconWrapper = styled.span`
 const InternalLink = ({ path, icon, text, disabled }: InternalLinkProps) => {
   return (
     <Link to={path}>
-      <Button disabled={disabled}>
+      <Button disabled={disabled} variant="contained">
         {icon && <IconWrapper>{icon}</IconWrapper>}
         {text}
       </Button>

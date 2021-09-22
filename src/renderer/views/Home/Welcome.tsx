@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../../components/Buttons/Button';
+import { Button } from '@mui/material';
 import Text from '../../components/Text';
 import { useAppDispatch } from '../../state';
 import { hideWelcome } from '../../state/application';
 
 const Header = styled.h2``;
-const UploadFile = styled.input``;
 
 const Welcome = () => {
   const dispatch = useAppDispatch();
@@ -27,10 +26,12 @@ const Welcome = () => {
         available at https://github.com/
       </Text>
       <Button
-        value="Let's go"
         onClick={handleHideWelcome}
         style={{ marginTop: '12px' }}
-      />
+        variant="contained"
+      >
+        Let's go
+      </Button>
     </>
   );
 };

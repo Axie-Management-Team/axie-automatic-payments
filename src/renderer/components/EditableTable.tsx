@@ -1,5 +1,13 @@
 import React from 'react';
 import { useTable } from 'react-table';
+import {
+  CssBaseline,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 
 export const EditableCell = ({
   value: initialValue,
@@ -32,29 +40,38 @@ const EditableTable = ({ updateMyData, columns, data }) => {
     tableInstance;
 
   return (
-    <table {...getTableProps()}>
-      <thead>
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row) => {
-          prepareRow(row);
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map((cell) => {
-                return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <>
+      <CssBaseline />
+      <TableContainer {...getTableProps()}>
+        <TableHead>
+          {headerGroups.map((headerGroup) => (
+            <TableRow {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <TableCell {...column.getHeaderProps()}>
+                  {column.render('Header')}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableHead>
+        <TableBody {...getTableBodyProps()}>
+          {rows.map((row) => {
+            prepareRow(row);
+            return (
+              <TableRow {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  return (
+                    <TableCell {...cell.getCellProps()}>
+                      {cell.render('Cell')}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </TableContainer>
+    </>
   );
 };
 
