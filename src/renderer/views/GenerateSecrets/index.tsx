@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@mui/material';
+import { Button, Paper } from '@mui/material';
 import EditableTable, { EditableCell } from '../../components/EditableTable';
 import { usePayments, useSecrets } from '../../state/application/hooks';
 import { Payment, Secret } from '../../state/types';
@@ -14,7 +14,7 @@ const GenerateSecrets: React.FC = () => {
 
   const [showFullPrivateKey, setShowFullPrivateKey] = React.useState(false);
 
-  const onTableUpdate = (rowContent, header: string, privateKey: string) => {
+  const onTableUpdate = (rowContent: any, privateKey: string) => {
     if (privateKey.startsWith('0x') && privateKey.length >= 66) {
       dispatch(addSecretAction(rowContent.publicRonin, privateKey));
       return true;
@@ -72,7 +72,11 @@ const GenerateSecrets: React.FC = () => {
   }, [payments, secrets, showFullPrivateKey]);
 
   return (
-    <>
+    <Paper
+      sx={{
+        p: 2,
+      }}
+    >
       <EditableTable
         columns={columns}
         data={missingPrivateKey}
@@ -90,7 +94,7 @@ const GenerateSecrets: React.FC = () => {
         data={havePrivateKey}
         updateMyData={onTableUpdate}
       />
-    </>
+    </Paper>
   );
 };
 

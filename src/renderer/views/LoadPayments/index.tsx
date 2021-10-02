@@ -1,8 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
-import { Button, Input } from '@mui/material';
+import { Button, Input, Paper } from '@mui/material';
 import Text from '../../components/Text';
 import { useAppDispatch } from '../../state';
 import { addPayments } from '../../state/application';
@@ -27,18 +26,23 @@ const LoadPayments = () => {
   };
 
   return (
-    <>
+    <Paper
+      sx={{
+        p: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        height: 240,
+      }}
+    >
       <Text>
-        You're ready to make your first payments. To continue please provide the
-        payment.json file.
+        You&apos;re ready to make your first payments. To continue please
+        provide the payment.json file.
       </Text>
-      <label htmlFor="contained-button-file">
-        <Input id="contained-button-file" type="file" onChange={fileUpload} />
-        <Button variant="contained" component="span">
-          Upload
-        </Button>
-      </label>
-    </>
+      <Input id="contained-button-file" type="file" onChange={fileUpload} />
+      <Button variant="contained" component="span">
+        Upload
+      </Button>
+    </Paper>
   );
 };
 

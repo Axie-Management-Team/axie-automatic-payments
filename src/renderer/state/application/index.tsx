@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import update from 'immutability-helper';
-import { Application, Secret, State } from '../types';
+import { Dispatch } from 'redux';
+import { Application, Secret } from '../types';
 
 const initialState: Application = {
   payments: [],
@@ -56,11 +57,11 @@ export const application = createSlice({
 export const { addPayment, addSecret, markAsExistingUser, removeAllPayments } =
   application.actions;
 
-export const hideWelcome = () => async (dispatch) => {
+export const hideWelcome = () => async (dispatch: Dispatch) => {
   dispatch(markAsExistingUser());
 };
 
-export const addPayments = (payments) => async (dispatch, state: State) => {
+export const addPayments = (payments) => async (dispatch: Dispatch) => {
   // Check it's valid
   dispatch(removeAllPayments());
   payments.forEach((payment) => {
@@ -69,8 +70,7 @@ export const addPayments = (payments) => async (dispatch, state: State) => {
 };
 
 export const addSecretAction =
-  (publicRonin: string, privateKey: string) =>
-  async (dispatch, state: State) => {
+  (publicRonin: string, privateKey: string) => async (dispatch: Dispatch) => {
     const secret: Secret = {
       AccountAddress: publicRonin,
       PrivateKey: privateKey,

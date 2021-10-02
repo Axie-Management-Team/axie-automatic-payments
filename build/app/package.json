@@ -15,5 +15,8 @@
     "postinstall": "yarn electron-rebuild && yarn link-modules"
   },
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "ethereumjs-tx": "^2.1.2",
+    "web3": "^1.6.0"
+  }
 }

@@ -19,6 +19,11 @@ export interface Payment {
   ManagerPayout: number;
 }
 
+export interface PayableAccounts {
+  secret: Secret;
+  payment?: Payment;
+}
+
 export interface State {
   application: Application;
 }

@@ -19,8 +19,8 @@ const Menu = () => {
         disabled={!havePaymentFile}
       />
       <InternalLink
-        text="Claims"
-        path="/penis"
+        text="Claim SLP"
+        path="/claims"
         icon="🔑"
         disabled={!haveAccessToPrivateEndpoints}
       />
