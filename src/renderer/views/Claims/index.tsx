@@ -1,57 +1,44 @@
-import React, { useState } from 'react';
-import { Paper } from '@mui/material';
-import axios from 'axios';
-import { usePaymentsWithSecrets } from '../../state/application/hooks';
+import React, { useEffect, useState } from 'react';
+import { Button, Paper } from '@mui/material';
 import EditableTable from '../../components/EditableTable';
+import {
+  useFetchPayableAccountsWithOutSLP,
+  usePayableAccounts,
+} from '../../state/payableAccounts/hooks';
+import { fetchPayableAccounts } from '../../state/payableAccounts';
+import { useAppDispatch } from '../../state';
 
 const Home: React.FC = () => {
-  const payments = usePaymentsWithSecrets();
-  const defaultSlPInRonin = Array(payments.length).fill('pending');
-  const [slpInRonin, setSlpInRonin] = useState(defaultSlPInRonin);
+  useFetchPayableAccountsWithOutSLP();
+
+  const dispatch = useAppDispatch();
+  const payableAccounts = usePayableAccounts();
   const [columnsValues, setColumnsValues] = useState([]);
-
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Name',
-        accessor: 'name',
-      },
-      {
-        Header: 'Public ronin',
-        accessor: 'publicRonin',
-      },
-      {
-        Header: 'Unclaimed SLP',
-        accessor: 'unclaimedSLP',
-      },
-    ],
-    []
-  );
-
-  React.useEffect(() => {
-    payments.map(async (p, i) => {
-      const response = await axios.get(
-        `https://game-api.skymavis.com/game-api/clients/${p.payment?.AccountAddress.replace(
-          'ronin:',
-          '0x'
-        )}/items/1`
-      );
-      ({ claimable_total: slpInRonin[i] } = response.data);
-
-      setSlpInRonin(slpInRonin);
-    });
-  }, [slpInRonin, setSlpInRonin, payments]);
-
-  React.useEffect(() => {
-    const columnsValuesCalculated = payments.map((p, i) => {
+  useEffect(() => {
+    const values = payableAccounts.map((account) => {
       return {
-        name: p.payment?.Name,
-        publicRonin: p.payment?.AccountAddress,
-        unclaimedSLP: slpInRonin[i],
+        name: account.payment?.Name,
+        publicRonin: account.payment?.AccountAddress,
+        unclaimedSLP: account.unclaimed,
       };
     });
-    setColumnsValues(columnsValuesCalculated);
-  }, [slpInRonin, payments]);
+    setColumnsValues(values);
+  }, [payableAccounts]);
+
+  const columns = [
+    {
+      Header: 'Name',
+      accessor: 'name',
+    },
+    {
+      Header: 'Public ronin',
+      accessor: 'publicRonin',
+    },
+    {
+      Header: 'Unclaimed SLP',
+      accessor: 'unclaimedSLP',
+    },
+  ];
 
   return (
     <Paper
@@ -59,10 +46,27 @@ const Home: React.FC = () => {
         p: 2,
         display: 'flex',
         flexDirection: 'column',
-        height: 240,
+        height: 500,
       }}
     >
+      <Button
+
+        variant="outlined"
+        onClick={() => {
+          dispatch(fetchPayableAccounts());
+        }}
+      >
+        Load Unclaimed SLP
+      </Button>
       <EditableTable columns={columns} data={columnsValues} />
+      <Button
+        variant="contained"
+        onClick={() => {
+          console.log('claim');
+        }}
+      >
+        Claim all
+      </Button>
     </Paper>
   );
 };

@@ -4,6 +4,11 @@ export interface Application {
   isFirstTime: boolean;
 }
 
+export interface PayableAccountsState {
+  payableAccounts: PayableAccounts[];
+  isLoading: boolean;
+}
+
 export interface Secret {
   AccountAddress: string;
   PrivateKey: string;
@@ -22,8 +27,11 @@ export interface Payment {
 export interface PayableAccounts {
   secret: Secret;
   payment?: Payment;
+  unclaimed?: number;
+  claimed?: number;
 }
 
 export interface State {
   application: Application;
+  payableAccounts: PayableAccountsState;
 }
