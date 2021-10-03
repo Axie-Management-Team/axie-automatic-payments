@@ -1,18 +1,127 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8" />
     <title>Hello Electron React!</title>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
-  <script>
-    window.electron.ipcRenderer.once('ipc-example', (arg) => {
-      // eslint-disable-next-line no-console
-      console.log(arg);
-    });
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.0/web3.min.js"
+            integrity="sha512-+BhnLgfzIDDjssoEWHPmdgWRvbwIEdj0Xfiys7uSqfQWpMEOJ4ymJ88O6B1cB0j+4zjb5GhO+sb/kEicggvUQQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethereumjs-tx@2.1.2/dist/index.min.js"
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    window.electron.ipcRenderer.myPing();
-  </script>
+</head>
+<body>
+<div id="root"></div>
+</body>
+<script>
+  window.electron.ipcRenderer.once("ipc-example", (arg) => {
+    // eslint-disable-next-line no-console
+    console.log(arg);
+  });
+
+  window.electron.ipcRenderer.myPing();
+
+  const slp_abi=[
+    {
+      "constant":false,
+      "inputs":[
+        {
+          "internalType":"address",
+          "name":"_owner",
+          "type":"address"
+        },
+        {
+          "internalType":"uint256",
+          "name":"_amount",
+          "type":"uint256"
+        },
+        {
+          "internalType":"uint256",
+          "name":"_createdAt",
+          "type":"uint256"
+        },
+        {
+          "internalType":"bytes",
+          "name":"_signature",
+          "type":"bytes"
+        }
+      ],
+      "name":"checkPoint",
+      "outputs":[
+        {
+          "internalType":"uint256",
+          "name":"_balance",
+          "type":"uint256"
+        }
+      ],
+      "payable":false,
+      "stateMutability":"nonpayable",
+      "type":"function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant":false,
+      "inputs":[
+        {
+          "internalType":"address",
+          "name":"_to",
+          "type":"address"
+        },
+        {
+          "internalType":"uint256",
+          "name":"_value",
+          "type":"uint256"
+        }
+      ],
+      "name":"transfer",
+      "outputs":[
+        {
+          "internalType":"bool",
+          "name":"_success",
+          "type":"bool"
+        }
+      ],
+      "payable":false,
+      "stateMutability":"nonpayable",
+      "type":"function"
+    }
+  ];
+  const slp_contract_address = "0xa8754b9fa15fc18bb59458815510e40a12cd2014";
+  // const ronin_provider_free = "https://proxy.roninchain.com/free-gas-rpc";
+  const ronin_provider_free = "https://api.roninchain.com/rpc";
+
+  let w3 = new Web3(Web3.givenProvider || ronin_provider_free);
+
+  async function initialBalance(from_account) {
+
+    let slp_contract = new w3.eth.Contract(slp_abi, slp_contract_address);
+    let initial_balance = await slp_contract.methods.balanceOf(from_account).call();
+    console.log("Initial Balance:" + initial_balance);
+
+  }
+
+  async function signedMessage(msg,privateKey){
+   return  await w3.eth.accounts.sign(msg,  privateKey);
+  }
+</script>
 </html>

@@ -19,6 +19,7 @@ export const fetchPayableAccountsThunk = createAsyncThunk<any, any>(
     return {
       ...address,
       unclaimed: response.data.claimable_total,
+      blockchainRelated: response.data.blockchain_related.signature,
     };
   }
 );

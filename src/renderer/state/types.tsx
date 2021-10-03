@@ -29,8 +29,13 @@ export interface PayableAccounts {
   payment?: Payment;
   unclaimed?: number;
   claimed?: number;
+  blockchainRelated: PayableSignature;
 }
-
+export interface PayableSignature {
+  signature: string;
+  amount: number;
+  timestamp: number;
+}
 export interface State {
   application: Application;
   payableAccounts: PayableAccountsState;
