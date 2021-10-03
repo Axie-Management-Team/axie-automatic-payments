@@ -1,5 +1,5 @@
-import { useSelector } from 'react-redux';
-import { PayableAccounts, Payment, Secret, State } from '../types';
+import { useSelector } from "react-redux";
+import { PayableAccounts, Payment, Secret, State } from "../types";
 
 export const useIsFirstTimeOnTheApplication = (): boolean => {
   return useSelector((state: State) => {
@@ -23,22 +23,24 @@ export const useSecrets = (): Secret[] => {
   });
 };
 
+export const getPaymentsWithSecrets = ({ secrets, payments }) => {
+  const paymentsWithSecrets: PayableAccounts[] = [];
+  secrets.forEach((secret) => {
+    const payment = payments.find(
+      (p) => p.AccountAddress === secret.AccountAddress
+    );
+    if (payment) {
+      paymentsWithSecrets.push({
+        secret,
+        payment
+      });
+    }
+  });
+  return paymentsWithSecrets;
+};
 export const usePaymentsWithSecrets = (): PayableAccounts[] => {
   return useSelector((state: State) => {
-    const { secrets, payments } = state.application;
-    const paymentsWithSecrets: PayableAccounts[] = [];
-    secrets.forEach((secret) => {
-      const payment = payments.find(
-        (p) => p.AccountAddress === secret.AccountAddress
-      );
-      if (payment) {
-        paymentsWithSecrets.push({
-          secret,
-          payment,
-        });
-      }
-    });
-    return paymentsWithSecrets;
+    return getPaymentsWithSecrets(state.application);
   });
 };
 

@@ -14,7 +14,11 @@ const GenerateSecrets: React.FC = () => {
 
   const [showFullPrivateKey, setShowFullPrivateKey] = React.useState(false);
 
-  const onTableUpdate = (rowContent: any, privateKey: string) => {
+  const onTableUpdate = (
+    rowContent: any,
+    field: string,
+    privateKey: string
+  ) => {
     if (privateKey.startsWith('0x') && privateKey.length >= 66) {
       dispatch(addSecretAction(rowContent.publicRonin, privateKey));
       return true;

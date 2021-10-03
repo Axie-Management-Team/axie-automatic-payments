@@ -42,7 +42,7 @@ const EditableTable = ({ updateMyData, columns, data }) => {
   return (
     <>
       <CssBaseline />
-      <TableContainer {...getTableProps()}>
+      <TableContainer {...getTableProps()} >
         <TableHead>
           {headerGroups.map((headerGroup) => (
             <TableRow {...headerGroup.getHeaderGroupProps()}>
