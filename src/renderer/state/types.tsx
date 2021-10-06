@@ -1,4 +1,5 @@
 export interface Application {
+  manager: string;
   secrets: Secret[];
   payments: Payment[];
   isFirstTime: boolean;
