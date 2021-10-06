@@ -4,8 +4,8 @@ export interface Application {
   isFirstTime: boolean;
 }
 
-export interface PayableAccountsState {
-  payableAccounts: PayableAccounts[];
+export interface ClaimableAccountsState {
+  claimableAccounts: ClaimableAccounts[];
   isLoading: boolean;
 }
 
@@ -24,19 +24,20 @@ export interface Payment {
   ManagerPayout: number;
 }
 
-export interface PayableAccounts {
+export interface ClaimableAccounts {
   secret: Secret;
   payment?: Payment;
   unclaimed?: number;
+  claimHash?: string;
   claimed?: number;
-  blockchainRelated: PayableSignature;
+  blockchainRelated: ClaimableSignature;
 }
-export interface PayableSignature {
+export interface ClaimableSignature {
   signature: string;
   amount: number;
   timestamp: number;
 }
 export interface State {
   application: Application;
-  payableAccounts: PayableAccountsState;
+  claimableAccounts: ClaimableAccountsState;
 }

@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Button, Paper } from "@mui/material";
-import Web3 from "web3";
 import EditableTable from "../../components/EditableTable";
 import {
-  useFetchPayableAccountsWithOutSLP,
-  usePayableAccounts
-} from "../../state/payableAccounts/hooks";
-import { fetchPayableAccounts } from "../../state/payableAccounts";
+  useFetchClaimableAccountsWithOutSLP,
+  useClaimableAccounts
+} from "../../state/claimableAccounts/hooks";
+import { claim, fetchClaimableAccounts } from "../../state/claimableAccounts";
 import { useAppDispatch } from "../../state";
-import { axieClaim, axieLogin, createRandomMessage } from "../../services/roninHelper";
 
 const Home: React.FC = () => {
-  useFetchPayableAccountsWithOutSLP();
+  useFetchClaimableAccountsWithOutSLP();
 
   const dispatch = useAppDispatch();
-  const payableAccounts = usePayableAccounts();
+  const claimableAccounts = useClaimableAccounts();
   const [columnsValues, setColumnsValues] = useState([]);
   useEffect(() => {
-    const values = payableAccounts.map((account) => {
+    const values = claimableAccounts.map((account) => {
       return {
         name: account.payment?.Name,
         publicRonin: account.payment?.AccountAddress,
@@ -25,7 +23,7 @@ const Home: React.FC = () => {
       };
     });
     setColumnsValues(values);
-  }, [payableAccounts]);
+  }, [claimableAccounts]);
 
   const columns = [
     {
@@ -54,7 +52,7 @@ const Home: React.FC = () => {
       <Button
         variant="outlined"
         onClick={() => {
-          dispatch(fetchPayableAccounts());
+          dispatch(fetchClaimableAccounts());
         }}
       >
         Load Unclaimed SLP
@@ -63,23 +61,7 @@ const Home: React.FC = () => {
       <Button
         variant="contained"
         onClick={async () => {
-          const privateKey = "0x12312313123123131313131313131313123";
-          const publicKey =
-            "ronin:feb792e52c0142c89a925381d50c9c4d2b106957".replace(
-              "ronin:",
-              "0x"
-            );
-          const randomMessage = await createRandomMessage();
-          const signedMsg = await window["signedMessage"](
-            randomMessage,
-            privateKey
-          );
-          const jwt = await axieLogin(signedMsg, publicKey);
-          const claimResponse = await axieClaim(jwt, publicKey);
-          columnsValues.map((col) => {
-            window.initialBalance(col.publicRonin.replace("ronin:", "0x"));
-            //   aaa(col.publicRonin.replace('ronin:', '0x'));
-          });
+          dispatch(claim());
         }}
       >
         Claim all

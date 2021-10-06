@@ -6,7 +6,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.0/web3.min.js"
             integrity="sha512-+BhnLgfzIDDjssoEWHPmdgWRvbwIEdj0Xfiys7uSqfQWpMEOJ4ymJ88O6B1cB0j+4zjb5GhO+sb/kEicggvUQQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdn.jsdelivr.net/npm/ethereumjs-tx@2.1.2/dist/index.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/ethereumjs-tx@2.1.2/dist/index.min.js"
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </head>
@@ -21,42 +21,42 @@
 
   window.electron.ipcRenderer.myPing();
 
-  const slp_abi=[
+  const slp_abi = [
     {
-      "constant":false,
-      "inputs":[
+      "constant": false,
+      "inputs": [
         {
-          "internalType":"address",
-          "name":"_owner",
-          "type":"address"
+          "internalType": "address",
+          "name": "_owner",
+          "type": "address"
         },
         {
-          "internalType":"uint256",
-          "name":"_amount",
-          "type":"uint256"
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
         },
         {
-          "internalType":"uint256",
-          "name":"_createdAt",
-          "type":"uint256"
+          "internalType": "uint256",
+          "name": "_createdAt",
+          "type": "uint256"
         },
         {
-          "internalType":"bytes",
-          "name":"_signature",
-          "type":"bytes"
+          "internalType": "bytes",
+          "name": "_signature",
+          "type": "bytes"
         }
       ],
-      "name":"checkPoint",
-      "outputs":[
+      "name": "checkPoint",
+      "outputs": [
         {
-          "internalType":"uint256",
-          "name":"_balance",
-          "type":"uint256"
+          "internalType": "uint256",
+          "name": "_balance",
+          "type": "uint256"
         }
       ],
-      "payable":false,
-      "stateMutability":"nonpayable",
-      "type":"function"
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "constant": true,
@@ -80,30 +80,30 @@
       "type": "function"
     },
     {
-      "constant":false,
-      "inputs":[
+      "constant": false,
+      "inputs": [
         {
-          "internalType":"address",
-          "name":"_to",
-          "type":"address"
+          "internalType": "address",
+          "name": "_to",
+          "type": "address"
         },
         {
-          "internalType":"uint256",
-          "name":"_value",
-          "type":"uint256"
+          "internalType": "uint256",
+          "name": "_value",
+          "type": "uint256"
         }
       ],
-      "name":"transfer",
-      "outputs":[
+      "name": "transfer",
+      "outputs": [
         {
-          "internalType":"bool",
-          "name":"_success",
-          "type":"bool"
+          "internalType": "bool",
+          "name": "_success",
+          "type": "bool"
         }
       ],
-      "payable":false,
-      "stateMutability":"nonpayable",
-      "type":"function"
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     }
   ];
   const slp_contract_address = "0xa8754b9fa15fc18bb59458815510e40a12cd2014";
@@ -111,6 +111,7 @@
   const ronin_provider_free = "https://api.roninchain.com/rpc";
 
   let w3 = new Web3(Web3.givenProvider || ronin_provider_free);
+  let slp_contract = null;
 
   async function initialBalance(from_account) {
 
@@ -120,8 +121,41 @@
 
   }
 
-  async function signedMessage(msg,privateKey){
-   return  await w3.eth.accounts.sign(msg,  privateKey);
+  async function getNonce(account) {
+    return w3.eth.getTransactionCount(
+      Web3.toChecksumAddress(account.replace("ronin:", "0x"))
+    );
+  }
+
+  async function sendTransaction(signedClaim) {
+    return w3.eth.sendSignedTransaction(signedClaim);
+  }
+
+  async function getTransactionHash(signedClaim) {
+    return w3.toHex(w3.keccak256(signedClaim));
+  }
+
+  async function getTransactionRecipt(hash) {
+    return w3.eth.getTransactionReceipt(hash);
+  }
+
+  function signClaim(ransactionBuilded, privateKey) {
+    w3.eth.accounts.signTransaction(
+      ransactionBuilded,
+      privateKey
+    );
+  }
+
+  function buildTransaction({ account, amount, timestamp, signature, nonce }) {
+    claim = slp_contract.functions.checkpoint(
+      Web3.toChecksumAddress(account),
+      amount, timestamp, signature
+    ).buildTransaction({ "gas": 1000000, "gasPrice": 0, "nonce": nonce });
+
+  }
+
+  async function signedMessage(msg, privateKey) {
+    return await w3.eth.accounts.sign(msg, privateKey);
   }
 </script>
 </html>
