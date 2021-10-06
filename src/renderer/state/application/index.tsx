@@ -81,7 +81,9 @@ export const addPayments = (paymentsOrigin) => async (dispatch: Dispatch) => {
     dispatch(addManager(manager));
   } else {
     console.log("Invalid Manager")
-    // TODO: Add nice error msg and stop this!
+    // TODO: Add nice error msg!
+    dispatch(removeAllPayments());
+    return;
   }
 
   const scholarsSchema = Joi.object({
@@ -116,6 +118,7 @@ export const addPayments = (paymentsOrigin) => async (dispatch: Dispatch) => {
       console.log('Invalid Payment');
       console.log(validation.error);
       // TODO: Add nice error msg and stop this!
+      dispatch(removeAllPayments());
     }
   });
 };
