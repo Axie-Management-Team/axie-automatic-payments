@@ -15,8 +15,7 @@ const LoadPayments = () => {
       const file: File | null | undefined = event.target.files?.item(0);
       if (file?.path) {
         const jsonFile = JSON.parse(await file.text());
-        dispatch(addPayments(jsonFile.Scholars));
-
+        dispatch(addPayments(jsonFile));
         history.push('/');
         toast.info('Payment files loaded');
       }
