@@ -5,6 +5,7 @@ import { Button, Input, Paper } from '@mui/material';
 import Text from '../../components/Text';
 import { useAppDispatch } from '../../state';
 import { addPayments } from '../../state/application';
+import validatePaymentFile from '../../services/validatePaymentFile';
 
 const LoadPayments = () => {
   const dispatch = useAppDispatch();
@@ -15,12 +16,14 @@ const LoadPayments = () => {
       const file: File | null | undefined = event.target.files?.item(0);
       if (file?.path) {
         const jsonFile = JSON.parse(await file.text());
+
+        validatePaymentFile(jsonFile);
         dispatch(addPayments(jsonFile));
         history.push('/');
         toast.info('Payment files loaded');
       }
     } catch (err) {
-      toast.error("Unable to load payments.json check if it's valid");
+      toast.error(`Unable to load payments.json check if it's valid. ${err}`);
     }
   };
 

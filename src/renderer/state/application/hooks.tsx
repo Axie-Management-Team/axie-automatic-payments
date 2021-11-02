@@ -1,5 +1,5 @@
-import { useSelector } from "react-redux";
-import { ClaimableAccounts, Payment, Secret, State } from "../types";
+import { useSelector } from 'react-redux';
+import { ClaimableAccounts, Payment, Secret, State } from '../types';
 
 export const useIsFirstTimeOnTheApplication = (): boolean => {
   return useSelector((state: State) => {
@@ -32,7 +32,7 @@ export const getPaymentsWithSecrets = ({ secrets, payments }) => {
     if (payment) {
       paymentsWithSecrets.push({
         secret,
-        payment
+        payment,
       });
     }
   });
@@ -40,7 +40,7 @@ export const getPaymentsWithSecrets = ({ secrets, payments }) => {
 };
 export const usePaymentsWithSecrets = (): ClaimableAccounts[] => {
   return useSelector((state: State) => {
-    return getPaymentsWithSecrets(state.application);
+    return getPaymentsWithSecrets({ ...state.application });
   });
 };
 

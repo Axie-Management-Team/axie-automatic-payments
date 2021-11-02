@@ -81,6 +81,10 @@ const GenerateSecrets: React.FC = () => {
         p: 2,
       }}
     >
+      <Button variant="contained">Import CSV</Button>
+      <Button variant="contained">Import JSON</Button>
+      <Button variant="contained">Export JSON</Button>
+
       <EditableTable
         columns={columns}
         data={missingPrivateKey}

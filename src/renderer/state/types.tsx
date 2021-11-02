@@ -1,5 +1,4 @@
 export interface Application {
-  mode: string;
   manager: string;
   secrets: Secret[];
   payments: Payment[];
@@ -39,7 +38,25 @@ export interface ClaimableSignature {
   amount: number;
   timestamp: number;
 }
+
+export interface PayableAccounts {
+  name: string;
+  address: string;
+  scholarPayoutAddress: string;
+  scholarPayout: number;
+  trainerPayoutAddress: string;
+  trainerPayout: number;
+  managerPayout: number;
+  managerAddress: number;
+  feePayout: number;
+}
+
+export interface PayableAccountsState {
+  payableAccounts: PayableAccounts[];
+}
+
 export interface State {
   application: Application;
   claimableAccounts: ClaimableAccountsState;
+  payableAccounts: PayableAccountsState;
 }

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Button, Paper } from "@mui/material";
-import EditableTable from "../../components/EditableTable";
+import React, { useEffect, useState } from 'react';
+import { Button, Paper } from '@mui/material';
+import EditableTable from '../../components/EditableTable';
 import {
   useFetchClaimableAccountsWithOutSLP,
-  useClaimableAccounts
-} from "../../state/claimableAccounts/hooks";
-import { claim, fetchClaimableAccounts } from "../../state/claimableAccounts";
-import { useAppDispatch } from "../../state";
+  useClaimableAccounts,
+} from '../../state/claimableAccounts/hooks';
+import { claim, fetchClaimableAccounts } from '../../state/claimableAccounts';
+import { useAppDispatch } from '../../state';
 
 const Home: React.FC = () => {
   useFetchClaimableAccountsWithOutSLP();
@@ -19,7 +19,7 @@ const Home: React.FC = () => {
       return {
         name: account.payment?.Name,
         publicRonin: account.payment?.AccountAddress,
-        unclaimedSLP: account.unclaimed
+        unclaimedSLP: account.unclaimed,
       };
     });
     setColumnsValues(values);
@@ -27,26 +27,26 @@ const Home: React.FC = () => {
 
   const columns = [
     {
-      Header: "Name",
-      accessor: "name"
+      Header: 'Name',
+      accessor: 'name',
     },
     {
-      Header: "Public ronin",
-      accessor: "publicRonin"
+      Header: 'Public ronin',
+      accessor: 'publicRonin',
     },
     {
-      Header: "Unclaimed SLP",
-      accessor: "unclaimedSLP"
-    }
+      Header: 'Unclaimed SLP',
+      accessor: 'unclaimedSLP',
+    },
   ];
 
   return (
     <Paper
       sx={{
         p: 2,
-        display: "flex",
-        flexDirection: "column",
-        height: 500
+        display: 'flex',
+        flexDirection: 'column',
+        height: 500,
       }}
     >
       <Button

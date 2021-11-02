@@ -19,6 +19,7 @@ import store from './state/index';
 import GenerateSecrets from './views/GenerateSecrets';
 import Claims from './views/Claims';
 import LoadPayments from './views/LoadPayments';
+import Payments from './views/Payments';
 import Logo from './components/Logo';
 
 const Header = styled.h1`
@@ -66,6 +67,7 @@ export default function App() {
                 <Switch>
                   <Route path="/load/payments" component={LoadPayments} />
                   <Route path="/generate/secrets" component={GenerateSecrets} />
+                  <Route path="/payments" component={Payments} />
                   <Route path="/claims" component={Claims} />
                   <Route path="/" component={Home} />
                 </Switch>

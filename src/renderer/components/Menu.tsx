@@ -24,6 +24,12 @@ const Menu = () => {
         icon="🔑"
         disabled={!haveAccessToPrivateEndpoints}
       />
+      <InternalLink
+        text="Payments"
+        path="/payments"
+        icon="🔑"
+        disabled={!haveAccessToPrivateEndpoints}
+      />
     </>
   );
 };
