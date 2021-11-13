@@ -113,9 +113,16 @@
   let w3 = new Web3(Web3.givenProvider || ronin_provider_free);
   let slp_contract = null;
 
+  const slpContract = () => {
+    if (slp_contract === null) {
+      slp_contract = new w3.eth.Contract(slp_abi, slp_contract_address);
+    }
+    return slp_contract;
+  }
+
   async function initialBalance(from_account) {
 
-    let slp_contract = new w3.eth.Contract(slp_abi, slp_contract_address);
+    let slp_contract = slpContract();
     let initial_balance = await slp_contract.methods.balanceOf(from_account).call();
     console.log("Initial Balance:" + initial_balance);
 
@@ -123,7 +130,7 @@
 
   async function getNonce(account) {
     return w3.eth.getTransactionCount(
-      Web3.toChecksumAddress(account.replace("ronin:", "0x"))
+      Web3.utils.toChecksumAddress(account.replace("ronin:", "0x"))
     );
   }
 
@@ -147,11 +154,10 @@
   }
 
   function buildTransaction({ account, amount, timestamp, signature, nonce }) {
-    claim = slp_contract.functions.checkpoint(
-      Web3.toChecksumAddress(account),
+    claim = slpContract().methods.checkPoint(
+      Web3.utils.toChecksumAddress(account),
       amount, timestamp, signature
-    ).buildTransaction({ "gas": 1000000, "gasPrice": 0, "nonce": nonce });
-
+    ).encodeABI({ "gas": 1000000, "gasPrice": 0, "nonce": nonce });
   }
 
   async function signedMessage(msg, privateKey) {

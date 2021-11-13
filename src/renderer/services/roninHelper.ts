@@ -8,7 +8,7 @@ export async function createRandomMessage() {
   };
   const url = 'https://graphql-gateway.axieinfinity.com/graphql';
   const response = await axios.post(url, payload);
-  return response.data.data.createRandomMessage;
+  return response?.data?.data?.createRandomMessage;
 }
 
 export async function axieLogin(web3SignedMessage, ronin) {

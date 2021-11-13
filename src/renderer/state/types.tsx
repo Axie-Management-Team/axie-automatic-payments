@@ -32,6 +32,7 @@ export interface ClaimableAccounts {
   claimHash?: string;
   claimed?: number;
   blockchainRelated: ClaimableSignature;
+  lastError?: string;
 }
 export interface ClaimableSignature {
   signature: string;

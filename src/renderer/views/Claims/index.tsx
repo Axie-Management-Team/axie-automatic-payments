@@ -20,6 +20,7 @@ const Home: React.FC = () => {
         name: account.payment?.Name,
         publicRonin: account.payment?.AccountAddress,
         unclaimedSLP: account.unclaimed,
+        lastError: account?.lastError,
       };
     });
     setColumnsValues(values);
@@ -37,6 +38,10 @@ const Home: React.FC = () => {
     {
       Header: 'Unclaimed SLP',
       accessor: 'unclaimedSLP',
+    },
+    {
+      Header: 'Last Error',
+      accessor: 'lastError',
     },
   ];
 

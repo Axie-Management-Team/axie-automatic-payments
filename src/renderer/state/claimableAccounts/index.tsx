@@ -31,26 +31,40 @@ export const fetchPayableAccountsThunk = createAsyncThunk<any, any>(
 
 export const claimThunk = createAsyncThunk<any, any>(
   'claimThunk',
-  async (publicKey, privateKey) => {
+  async (pairPublicSecret) => {
+    const {
+      signedMessage,
+      getNonce,
+      buildTransaction,
+      signClaim,
+      sendTransaction,
+      getTransactionHash,
+    } = window;
+
+    const { publicAddress, privateAddress } = pairPublicSecret;
+
     const randomMessage = await createRandomMessage();
-    const signedMsg = await window.signedMessage(randomMessage, privateKey);
-    const jwt = await axieLogin(signedMsg, publicKey);
+    const signedMsg = await window.signedMessage(randomMessage, privateAddress);
+    const jwt = await axieLogin(signedMsg, publicAddress);
 
-    const { amount, timestamp, signature } = await axieClaim(jwt, publicKey);
+    const { amount, timestamp, signature } = await axieClaim(
+      jwt,
+      publicAddress
+    );
 
-    const nonce = await window.getNonce(publicKey);
-    const transactionBuilded = window.buildTransaction({
-      publicKey,
+    const nonce = await getNonce(publicAddress);
+    const transactionBuilded = buildTransaction({
+      publicAddress,
       amount,
       timestamp,
       signature,
       nonce,
     });
-    const signedClaim = window.signClaim(transactionBuilded, privateKey);
-    window.sendTransaction(signedClaim);
-    const hash = window.getTransactionHash(signedClaim);
+    const signedClaim = signClaim(transactionBuilded, privateAddress);
+    sendTransaction(signedClaim);
+    const hash = getTransactionHash(signedClaim);
     console.log('Transaction hash', hash);
-    return { address: publicKey, hash };
+    return { address: publicAddress, hash };
   }
 );
 
@@ -88,6 +102,12 @@ export const claimableAccountsState = createSlice({
     });
     builder.addCase(claimThunk.rejected, (state, action) => {
       console.log(action);
+      const index = state.claimableAccounts.findIndex(
+        (account) =>
+          account.payment?.AccountAddress.replace('ronin:', '0x') ===
+          action.meta.arg
+      );
+      state.claimableAccounts[index].lastError = action.error.message;
     });
   },
 });
@@ -109,7 +129,7 @@ export const fetchClaimableAccounts = () => async (dispatch, getState) => {
   });
 };
 export const claim = () => async (dispatch, getState) => {
-  getState().claimableAccounts.claimableAccounts.map((account) => {
+  getState().claimableAccounts.claimableAccounts.forEach((account) => {
     const publicAddress = account.secret?.AccountAddress.replace(
       'ronin:',
       '0x'
@@ -117,7 +137,7 @@ export const claim = () => async (dispatch, getState) => {
     const privateAddress = account.secret?.PrivateKey;
     window.initialBalance(publicAddress);
 
-    dispatch(claimThunk(publicAddress, privateAddress));
+    dispatch(claimThunk({ publicAddress, privateAddress }));
   });
 };
 export const claimableAccounts = () => async (dispatch, getState) => {
